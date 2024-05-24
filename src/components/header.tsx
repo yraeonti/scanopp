@@ -1,4 +1,7 @@
+import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
 import { HeaderLogo } from "./header-logo";
+import { Navigation } from "./navigation";
+import { Loader2 } from "lucide-react";
 
 export const Header = () => {
   return (
@@ -6,10 +9,18 @@ export const Header = () => {
       <div className="max-w-screen-4xl mx-auto">
         <div className="flex items-center  lg:gap-x-16">
           <HeaderLogo />
-          {/* <Navigation /> */}
+          <Navigation />
 
-          {/* <ModeToggle /> */}
+          <div className="ml-auto">
+            <ClerkLoaded>
+              <UserButton afterSignOutUrl="/" />
+            </ClerkLoaded>
+            <ClerkLoading>
+              <Loader2 className="animate-spin text-muted-foreground" />
+            </ClerkLoading>
+          </div>
         </div>
+        {/* <ModeToggle /> */}
       </div>
     </header>
   );
