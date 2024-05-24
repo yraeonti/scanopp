@@ -12,12 +12,12 @@ export const TotalBalanceBox = ({ label, amount, icon }: props) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl">{label}</CardTitle>
+        <CardTitle className="text-xl flex gap-x-4 items-center">
+          {label}
+          <span>{icon}</span>
+        </CardTitle>
       </CardHeader>
-      <CardContent className="flex gap-x-4 items-center">
-        {amount}
-        <span>{icon}</span>
-      </CardContent>
+      <CardContent>{amount}</CardContent>
     </Card>
   );
 };
