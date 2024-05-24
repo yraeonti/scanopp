@@ -5,18 +5,19 @@ import { TotalBalanceBox } from "@/components/total-balanceBox";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
 import {
-  Circle,
-  CircleDashed,
-  CircleOff,
+  Ban,
+  CheckCircle,
   Plus,
   Scan,
   TrendingDown,
   TrendingUp,
   Upload,
 } from "lucide-react";
+import { TransactionsChart } from "./_components/transaction-chart";
+import { TransactionsTable } from "./_components/transactions-table";
 
 export default function Home() {
-  const { user, isLoaded } = useUser();
+  const { user } = useUser();
   return (
     <section className="no-scrollbar flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll">
       <div className="no-scrollbar flex w-full flex-1 flex-col gap-8 px-5 sm:px-8 py-7 lg:py-12 xl:max-h-screen xl:overflow-y-scroll">
@@ -58,14 +59,18 @@ export default function Home() {
           <TotalBalanceBox
             label="Failed Transactions"
             amount="$10000"
-            icon={<CircleOff className="text-red-500" />}
+            icon={<Ban className="text-red-500" />}
           />
           <TotalBalanceBox
             label="Successful Transactions"
             amount="$10000"
-            icon={<Circle className="text-green-500" />}
+            icon={<CheckCircle className="text-green-500" />}
           />
         </div>
+
+        <TransactionsChart />
+
+        <TransactionsTable />
       </div>
     </section>
   );

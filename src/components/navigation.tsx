@@ -7,8 +7,8 @@ const routes = [
     label: "Dashboard",
   },
   {
-    href: "/shared",
-    label: "Shared",
+    href: "/transactions",
+    label: "Transactions",
   },
   //   {
   //     href: "/profile",
