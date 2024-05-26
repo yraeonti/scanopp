@@ -15,8 +15,11 @@ import {
 } from "lucide-react";
 import { TransactionsChart } from "./_components/transaction-chart";
 import { TransactionsTable } from "./_components/transactions-table";
+import { Badge } from "@/components/ui/badge";
+import { useUploadImage } from "@/features/upload-image/hooks/use-upload-image";
 
 export default function Home() {
+  const { onOpen } = useUploadImage();
   const { user } = useUser();
   return (
     <section className="no-scrollbar flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll">
@@ -30,13 +33,19 @@ export default function Home() {
           />
 
           <div className="flex gap-x-3">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled>
               <Upload className="mr-2 " />
-              Upload
+              Upload(pdf, csv)
+              <Badge
+                variant="secondary"
+                className="italic text-xs text-cyan-600"
+              >
+                beta
+              </Badge>
             </Button>
-            <Button variant="outline" size="sm">
-              <Scan className="mr-2" />
-              Scan
+            <Button variant="outline" size="sm" onClick={onOpen}>
+              <Upload className="mr-2" />
+              Upload(png, jpeg)
             </Button>
             <Button variant="outline" size="sm">
               <Plus className="mr-2" />
@@ -68,7 +77,7 @@ export default function Home() {
           />
         </div>
 
-        <TransactionsChart />
+        {/* <TransactionsChart /> */}
 
         <TransactionsTable />
       </div>
