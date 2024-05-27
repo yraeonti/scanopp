@@ -1,0 +1,106 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const formSchema = z.object({
+  file: z.instanceof(File),
+});
+
+export const FileAddForm = () => {
+  const [preview, setPreview] = useState<string | null>(null);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      file: new File([], ""),
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log(data);
+  };
+
+  const handleFileChange = (file: File | null) => {
+    if (file) {
+      const fileUrl = URL.createObjectURL(file);
+      setPreview(fileUrl);
+    } else {
+      setPreview(null);
+    }
+  };
+
+  return (
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>File Upload</CardTitle>
+          <CardDescription>Please ensure the flle is clear.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full p-10"
+            >
+              <FormField
+                control={form.control}
+                name="file"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>File</FormLabel>
+                      <FormControl>
+                        <Input
+                          accept=".jpg, .jpeg, .png,"
+                          type="file"
+                          placeholder="Select file"
+                          onChange={(e) => {
+                            const file = e.target.files
+                              ? e.target.files[0]
+                              : null;
+                            field.onChange(file);
+                            handleFileChange(file);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+              {preview && (
+                <div className="mt-4">
+                  <img
+                    src={preview}
+                    alt="Selected File"
+                    className="w-full h-auto"
+                  />
+                </div>
+              )}
+              <Button type="submit" className="mt-4 w-full">
+                Submit
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </>
+  );
+};

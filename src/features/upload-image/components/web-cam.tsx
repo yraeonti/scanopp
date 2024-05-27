@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 
 const videoConstraints = {
   width: 720,
-  height: 360,
+  height: 500,
   facingMode: "user",
 };
 
@@ -18,48 +24,66 @@ export const ImageCapture = () => {
     if (imageSrc) {
       setUrl(imageSrc);
     }
+    console.log(webcamRef.current);
   }, [webcamRef]);
   return (
     <>
       <Card>
-        {isCaptureEnable || (
-          <button onClick={() => setCaptureEnable(true)}>start</button>
-        )}
+        <CardHeader>
+          <CardTitle>Image capture</CardTitle>
+          <CardDescription>Please ensure the receipt is clear.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {isCaptureEnable || (
+            <Button className="w-full" onClick={() => setCaptureEnable(true)}>
+              Sart
+            </Button>
+          )}
 
-        {isCaptureEnable && (
-          <>
-            <div>
-              <button onClick={() => setCaptureEnable(false)}>end </button>
-            </div>
-            <div>
-              <Webcam
-                audio={false}
-                width={540}
-                height={360}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                videoConstraints={videoConstraints}
-              />
-            </div>
-            <button onClick={capture}>capture</button>
-          </>
-        )}
-        {url && (
-          <>
-            <div>
-              <button
-                onClick={() => {
-                  setUrl(null);
-                }}
+          {isCaptureEnable && (
+            <>
+              <Button
+                className="w-full"
+                onClick={() => setCaptureEnable(false)}
               >
-                delete
-              </button>
-            </div>
-            <div>
-              <img src={url} alt="Screenshot" />
-            </div>
-          </>
-        )}
+                Stop
+              </Button>
+
+              <div>
+                <Webcam
+                  className="w-full rounded-md"
+                  audio={false}
+                  width={540}
+                  height={360}
+                  ref={webcamRef}
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={videoConstraints}
+                />
+              </div>
+              <Button className="w-full" onClick={capture}>
+                Capture
+              </Button>
+            </>
+          )}
+          {url && (
+            <>
+              <div>
+                <img src={url} alt="Screenshot" />
+              </div>
+
+              <>
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    setUrl(null);
+                  }}
+                >
+                  Delete
+                </Button>
+              </>
+            </>
+          )}
+        </CardContent>
       </Card>
     </>
   );
