@@ -2,14 +2,28 @@ import { NextRequest, NextResponse } from "next/server";
 import formidable, { errors as formidableErrors } from "formidable";
 import { PDFExtract, PDFExtractOptions } from "pdf.js-extract";
 import mime from "mime";
-import { PDFDocument } from "pdf-lib";
+import { auth } from "@clerk/nextjs/server";
 import OpenAI from "openai";
+import clientPromise, { dbName, document_names } from "../mongodb";
+import { Scanned_docs } from "../model.dto";
 
 const openai = new OpenAI();
 
 export async function POST(req: NextRequest, res: NextResponse) {
+  const { userId } = auth();
+
+  if (!userId) {
+    return NextResponse.json(
+      { error: "Error: No signed in user" },
+      { status: 401 }
+    );
+  }
+
+  const client = await clientPromise;
+  const db = client.db(dbName);
+
   try {
-    let result;
+    let result: any[] = [];
 
     const formData = await req.formData();
 
@@ -34,8 +48,31 @@ export async function POST(req: NextRequest, res: NextResponse) {
       case "jpeg":
       case "png":
       case "webp":
-        result = await parseImage(buffer, mimeType);
-        result = result ? JSON.parse(result) : null;
+        let resp;
+        resp = await parseImage(buffer, mimeType);
+        resp = resp ? JSON.parse(resp) : null;
+
+        if (resp && resp.length > 0) {
+          for (let d of resp as Scanned_docs[]) {
+            const docs = await db
+              .collection<Scanned_docs>(document_names.scanned_docs)
+              .findOne({
+                transaction_id: d?.transaction_id,
+                user_id: userId,
+              });
+
+            if (!docs) {
+              d["user_id"] = userId;
+              d["created_at"] = new Date();
+              result.push(d);
+            }
+          }
+
+          result.length > 0 &&
+            (await db
+              .collection(document_names.scanned_docs)
+              .insertMany(result));
+        }
         break;
 
       default:
@@ -75,12 +112,13 @@ async function parseImage(buf: Buffer, ext: string) {
         content: `
         You will be provided with an image that should correspond to a receipt. 
         You will go through the receipt and return a consistent array of objects, with the keys
-        as these: transaction, amount, status, date, benefactor and category.
+        as these: transaction, transaction_id, amount, status, date, benefactor and category.
 
         - transaction: What the item being bought is for
+        - transaction_id: a unique identifier for the receipt
         - amount: Amount of the sold item
         - status: If the transaction was succesful or not (only two possible values: true or false)
-        - date: Date of purchase
+        - date: Date of purchase in ISO format
         - benefactor: The recipient of the purchase, the seller
         - category: If it was a credit transaction or debit transaction (only two possible values: debit or credit)
 
