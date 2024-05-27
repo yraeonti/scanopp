@@ -62,6 +62,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
               });
 
             if (!docs) {
+              d["date"] = new Date(d["date"]);
               d["user_id"] = userId;
               d["created_at"] = new Date();
               result.push(d);
