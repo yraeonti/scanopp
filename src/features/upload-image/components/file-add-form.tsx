@@ -51,7 +51,7 @@ export const FileAddForm = () => {
       <Card>
         <CardHeader>
           <CardTitle>File Upload</CardTitle>
-          <CardDescription>Please ensure the flle is clear.</CardDescription>
+          <CardDescription>Please ensure the file is clear.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
