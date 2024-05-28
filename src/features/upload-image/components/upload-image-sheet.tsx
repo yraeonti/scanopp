@@ -9,7 +9,7 @@ import {
 import { useUploadImage } from "@/features/upload-image/hooks/use-upload-image";
 import { useState } from "react";
 import { ImageCapture } from "./web-cam";
-import { FileAddForm } from "./file-add-form";
+import FileAddForm from "./file-add-form";
 import { Button } from "@/components/ui/button";
 import { Camera, File } from "lucide-react";
 
