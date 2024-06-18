@@ -22,6 +22,7 @@ export const Navigation = () => {
     <nav className="flex items-center gap-x-2 overflow-x-auto">
       {routes.map((route) => (
         <NavButton
+          key={route.href}
           href={route.href}
           label={route.label}
           isActive={pathName === route.href}
