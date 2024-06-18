@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useUploadTransactionImages } from "../api/use-upload-transactions-image";
 
 const formSchema = z.object({
   file: z.instanceof(File),
@@ -26,6 +27,7 @@ const formSchema = z.object({
 
 const FileAddForm = () => {
   const [preview, setPreview] = useState<string | null>(null);
+  const mutation = useUploadTransactionImages();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,7 +36,11 @@ const FileAddForm = () => {
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    mutation.mutate(data.file, {
+      onSuccess: () => {
+        form.resetField;
+      },
+    });
   };
 
   const handleFileChange = (file: File | null) => {
@@ -94,7 +100,11 @@ const FileAddForm = () => {
                   />
                 </div>
               )}
-              <Button type="submit" className="mt-4 w-full">
+              <Button
+                type="submit"
+                className="mt-4 w-full"
+                disabled={mutation.isPending}
+              >
                 Submit
               </Button>
             </form>
