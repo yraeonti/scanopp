@@ -17,9 +17,11 @@ import { TransactionsChart } from "./_components/transaction-chart";
 import { TransactionsTable } from "./_components/transactions-table";
 import { Badge } from "@/components/ui/badge";
 import { useUploadImage } from "@/features/upload-image/hooks/use-upload-image";
+import { useCustomAdd } from "@/features/custom/hooks/use-custom-add";
 
 export default function Home() {
   const { onOpen } = useUploadImage();
+  const { onOpen: onCustomOpen } = useCustomAdd();
   const { user } = useUser();
   return (
     <section className="no-scrollbar flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll">
@@ -32,7 +34,7 @@ export default function Home() {
             subtext="Access and manage your financial transactions efficiently."
           />
 
-          <div className="flex gap-x-3">
+          <div className="flex flex-col md:flex-row gap-y-2 gap-x-3">
             <Button variant="outline" size="sm" disabled>
               <Upload className="mr-2 " />
               Upload(pdf, csv)
@@ -47,7 +49,7 @@ export default function Home() {
               <Upload className="mr-2" />
               Upload(png, jpeg)
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={onCustomOpen}>
               <Plus className="mr-2" />
               Custom
             </Button>

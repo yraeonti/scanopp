@@ -24,7 +24,7 @@ const formSchema = z.object({
   file: z.instanceof(File),
 });
 
-export const FileAddForm = () => {
+const FileAddForm = () => {
   const [preview, setPreview] = useState<string | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -104,3 +104,5 @@ export const FileAddForm = () => {
     </>
   );
 };
+
+export default FileAddForm;
