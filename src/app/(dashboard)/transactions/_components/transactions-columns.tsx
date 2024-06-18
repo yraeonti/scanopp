@@ -20,13 +20,11 @@ import {
 
 export const transactions_columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "transaction_name",
+    accessorKey: "transaction",
     header: () => <div className=" truncate  text-[#A3AED0]">Transaction</div>,
     cell: ({ row }) => {
       return (
-        <p className=" truncate capitalize ">
-          {row?.original?.transaction_name}
-        </p>
+        <p className=" truncate capitalize ">{row?.original?.transaction}</p>
       );
     },
   },
@@ -52,24 +50,24 @@ export const transactions_columns: ColumnDef<Transaction>[] = [
       );
     },
     cell: ({ row }) => {
-      const status: string = row?.original.status;
+      const status: boolean = row?.original.status;
       return (
         <Badge
           variant="secondary"
           className={cn(
             "capitalize py-1 px-2 rounded-sm",
-            status === "pending" && "bg-[#FFF6E9] text-[#B5850B]",
-            status === "failed" && "bg-[#FFEAEA] text-[#B83131]",
-            status === "successful" && "bg-[#EDFFEA] text-[#165E3D]"
+            // status === "pending" && "bg-[#FFF6E9] text-[#B5850B]",
+            status === false && "bg-[#FFEAEA] text-[#B83131]",
+            status === true && "bg-[#EDFFEA] text-[#165E3D]"
           )}
         >
-          {status === "pending" && <Clock className=" truncate mr-2" />}
+          {/* {status === "pending" && <Clock className=" truncate mr-2" />} */}
 
-          {status === "successful" && (
+          {status === true && (
             <CheckCircle className=" truncate mr-2 text-sm" />
           )}
-          {status === "failed" && <Ban className=" truncate mr-2" />}
-          {status}
+          {status === false && <Ban className=" truncate mr-2" />}
+          {status ? "Successful" : "Failed"}
         </Badge>
       );
     },

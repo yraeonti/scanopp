@@ -8,8 +8,8 @@ export const useGetTransactions = () => {
         console.log("here");
         const res = await fetch(`/api/docs`);
         if (res.ok) {
-          const data = await res.json();
-          console.log(data);
+          const { data } = await res.json();
+
           return data;
         }
       } catch (error) {
