@@ -8,12 +8,11 @@ import {
   Ban,
   CheckCircle,
   Plus,
-  Scan,
   TrendingDown,
   TrendingUp,
   Upload,
 } from "lucide-react";
-import { TransactionsChart } from "./_components/transaction-chart";
+
 import { TransactionsTable } from "./_components/transactions-table";
 import { Badge } from "@/components/ui/badge";
 import { useUploadImage } from "@/features/upload-image/hooks/use-upload-image";
