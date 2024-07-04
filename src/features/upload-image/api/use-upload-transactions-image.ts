@@ -21,6 +21,7 @@ export const useUploadTransactionImages = () => {
     onSuccess: () => {
       toast.success("Transactions uploaded successfully");
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
     },
     onError: () => {
       toast.error("Failed to upload Transactions");

@@ -20,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useUploadTransactionImages } from "../api/use-upload-transactions-image";
+import { useUploadImage } from "../hooks/use-upload-image";
 
 const formSchema = z.object({
   file: z.instanceof(File),
@@ -28,6 +29,7 @@ const formSchema = z.object({
 const FileAddForm = () => {
   const [preview, setPreview] = useState<string | null>(null);
   const mutation = useUploadTransactionImages();
+  const { onClose } = useUploadImage();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,6 +41,7 @@ const FileAddForm = () => {
     mutation.mutate(data.file, {
       onSuccess: () => {
         form.resetField;
+        onClose();
       },
     });
   };

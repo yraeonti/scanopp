@@ -72,7 +72,7 @@ export default function Home() {
           ) : (
             <TotalBalanceBox
               label="Total Debits"
-              amount={formatAmount(dashboardData.total_debit.sum_total)}
+              amount={formatAmount(dashboardData?.total_debit.sum_total)}
               icon={<TrendingDown className="text-red-500" />}
             />
           )}
@@ -92,7 +92,7 @@ export default function Home() {
           ) : (
             <TotalBalanceBox
               label="Failed Transactions"
-              amount={formatAmount(dashboardData.total_failed.sum_total)}
+              amount={formatAmount(dashboardData?.total_failed.sum_total)}
               icon={<Ban className="text-red-500" />}
             />
           )}
@@ -102,7 +102,7 @@ export default function Home() {
           ) : (
             <TotalBalanceBox
               label="Successful Transactions"
-              amount={formatAmount(dashboardData.total_successful.sum_total)}
+              amount={formatAmount(dashboardData?.total_successful.sum_total)}
               icon={<CheckCircle className="text-green-500" />}
             />
           )}
