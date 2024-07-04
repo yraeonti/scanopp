@@ -117,7 +117,7 @@ async function parseImage(buf: Buffer, ext: string) {
 
         - transaction: What the item being bought is for
         - transaction_id: a unique identifier for the receipt
-        - amount: Amount of the sold item
+        - amount: Amount of the sold item (always a positive number)
         - status: If the transaction was succesful or not (only two possible values: true or false)
         - date: Date of purchase in ISO format
         - benefactor: The recipient of the purchase, the seller
