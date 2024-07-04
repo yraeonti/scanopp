@@ -30,6 +30,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
         sum_total: { $sum: "$amount" },
       },
     },
+    {
+      $unset: ["_id"],
+    },
   ];
 
   const pipeline_credit = [
@@ -44,6 +47,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
         _id: null,
         sum_total: { $sum: "$amount" },
       },
+    },
+    {
+      $unset: ["_id"],
     },
   ];
 
@@ -60,6 +66,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
         sum_total: { $sum: "$amount" },
       },
     },
+    {
+      $unset: ["_id"],
+    },
   ];
 
   const pipeline_failed = [
@@ -74,6 +83,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
         _id: null,
         sum_total: { $sum: "$amount" },
       },
+    },
+    {
+      $unset: ["_id"],
     },
   ];
 
@@ -95,17 +107,17 @@ export async function GET(req: NextRequest, res: NextResponse) {
       .aggregate(pipeline_failed)
       .toArray();
 
-    const data = await db
+    const recent_transactions = await db
       .collection(document_names.scanned_docs)
-      .find({ user_id: userId })
+      .find({ user_id: userId }, { sort: { created_at: -1 }, limit: 10 })
       .toArray();
 
     return NextResponse.json({
-      total_debit,
-      total_credit,
-      total_successful,
-      total_failed,
-      data,
+      total_debit: { sum_total: total_debit[0]?.sum_total || 0 },
+      total_credit: { sum_total: total_credit[0]?.sum_total || 0 },
+      total_successful: { sum_total: total_successful[0]?.sum_total || 0 },
+      total_failed: { sum_total: total_failed[0]?.sum_total || 0 },
+      recent_transactions,
     });
   } catch (error) {
     return NextResponse.json(
