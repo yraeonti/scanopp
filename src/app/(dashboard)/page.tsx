@@ -17,11 +17,16 @@ import { TransactionsTable } from "./_components/transactions-table";
 import { Badge } from "@/components/ui/badge";
 import { useUploadImage } from "@/features/upload-image/hooks/use-upload-image";
 import { useCustomAdd } from "@/features/custom/hooks/use-custom-add";
+import { useGetDashboardData } from "@/features/dashboard/api/use-get-dashboard-data";
 
 export default function Home() {
   const { onOpen } = useUploadImage();
   const { onOpen: onCustomOpen } = useCustomAdd();
   const { user } = useUser();
+
+  const { data, isLoading } = useGetDashboardData();
+  console.log(data);
+
   return (
     <section className="no-scrollbar flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll">
       <div className="no-scrollbar flex w-full flex-1 flex-col gap-8 px-5 sm:px-8 py-7 lg:py-12 xl:max-h-screen xl:overflow-y-scroll">
