@@ -18,14 +18,20 @@ import { Badge } from "@/components/ui/badge";
 import { useUploadImage } from "@/features/upload-image/hooks/use-upload-image";
 import { useCustomAdd } from "@/features/custom/hooks/use-custom-add";
 import { useGetDashboardData } from "@/features/dashboard/api/use-get-dashboard-data";
+import { DashboardData } from "@/types";
+import { formatAmount } from "@/lib/utils";
 
 export default function Home() {
   const { onOpen } = useUploadImage();
   const { onOpen: onCustomOpen } = useCustomAdd();
+
   const { user } = useUser();
 
-  const { data, isLoading } = useGetDashboardData();
-  console.log(data);
+  const { data, isLoading, isError } = useGetDashboardData();
+
+  const dashboardData = data as DashboardData;
+
+  console.log(dashboardData);
 
   return (
     <section className="no-scrollbar flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll">
@@ -61,31 +67,51 @@ export default function Home() {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-between gap-4">
-          <TotalBalanceBox
-            label="Total Debits"
-            amount="$10000"
-            icon={<TrendingDown className="text-red-500" />}
-          />
-          <TotalBalanceBox
-            label="Total Credits"
-            amount="$10000"
-            icon={<TrendingUp className="text-green-500" />}
-          />
-          <TotalBalanceBox
-            label="Failed Transactions"
-            amount="$10000"
-            icon={<Ban className="text-red-500" />}
-          />
-          <TotalBalanceBox
-            label="Successful Transactions"
-            amount="$10000"
-            icon={<CheckCircle className="text-green-500" />}
-          />
+          {isLoading ? (
+            <TotalBalanceBox.Skeleton />
+          ) : (
+            <TotalBalanceBox
+              label="Total Debits"
+              amount={formatAmount(dashboardData.total_debit.sum_total)}
+              icon={<TrendingDown className="text-red-500" />}
+            />
+          )}
+
+          {isLoading ? (
+            <TotalBalanceBox.Skeleton />
+          ) : (
+            <TotalBalanceBox
+              label="Total Credits"
+              amount={formatAmount(dashboardData?.total_credit.sum_total)}
+              icon={<TrendingUp className="text-green-500" />}
+            />
+          )}
+
+          {isLoading ? (
+            <TotalBalanceBox.Skeleton />
+          ) : (
+            <TotalBalanceBox
+              label="Failed Transactions"
+              amount={formatAmount(dashboardData.total_failed.sum_total)}
+              icon={<Ban className="text-red-500" />}
+            />
+          )}
+
+          {isLoading ? (
+            <TotalBalanceBox.Skeleton />
+          ) : (
+            <TotalBalanceBox
+              label="Successful Transactions"
+              amount={formatAmount(dashboardData.total_successful.sum_total)}
+              icon={<CheckCircle className="text-green-500" />}
+            />
+          )}
         </div>
 
-        {/* <TransactionsChart /> */}
-
-        <TransactionsTable />
+        <TransactionsTable
+          transactions={dashboardData?.recent_transactions ?? []}
+          isLoading={isLoading}
+        />
       </div>
     </section>
   );
