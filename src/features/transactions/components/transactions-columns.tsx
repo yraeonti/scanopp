@@ -7,16 +7,16 @@ import { Badge } from "@/components/ui/badge";
 import { cn, formatAmount } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import Link from "next/link";
+
 import { Transaction } from "@/types";
 import {
   ArrowUpDown,
   Ban,
   CheckCircle,
-  Clock,
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
+import { TransactionsActions } from "./transactions-actions";
 
 export const transactions_columns: ColumnDef<Transaction>[] = [
   {
@@ -138,11 +138,9 @@ export const transactions_columns: ColumnDef<Transaction>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      return (
-        <Button variant="outline" className="flex items-center">
-          View More
-        </Button>
-      );
+      const transaction = row.original;
+
+      return <TransactionsActions transaction={transaction} />;
     },
   },
 ];
