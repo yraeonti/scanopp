@@ -1,4 +1,4 @@
-import { TransactionsTable } from "./_components/transactions-table";
+import { TransactionsTable } from "../../../features/transactions/components/transactions-table";
 
 export default function TransactionsPage() {
   return (
