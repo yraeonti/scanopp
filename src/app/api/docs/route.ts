@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import clientPromise, { dbName, document_names } from "../mongodb";
 import { Scanned_docs } from "../model.dto";
 import { auth } from "@clerk/nextjs/server";
-import { SortDirection } from "mongodb";
+import { SortDirection, ObjectId } from "mongodb";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   const { userId } = auth();
@@ -128,7 +128,7 @@ export async function DELETE(req: NextRequest) {
     const deletedDoc = await db
       .collection(document_names.scanned_docs)
       .deleteOne({
-        id,
+        _id: new ObjectId(id),
       });
 
     return NextResponse.json({
