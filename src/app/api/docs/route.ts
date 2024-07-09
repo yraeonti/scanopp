@@ -136,7 +136,7 @@ export async function DELETE(req: NextRequest) {
     const deletedDoc = await db
       .collection(document_names.scanned_docs)
       .deleteOne({
-        _id: new ObjectId(id),
+        _id: new ObjectId(id as string),
         user_id: userId,
       });
 
