@@ -115,6 +115,14 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  const { userId } = auth();
+
+  if (!userId) {
+    return NextResponse.json(
+      { error: "Error: No signed in user" },
+      { status: 401 }
+    );
+  }
   try {
     const client = await clientPromise;
     const db = client.db(dbName);
@@ -129,6 +137,7 @@ export async function DELETE(req: NextRequest) {
       .collection(document_names.scanned_docs)
       .deleteOne({
         _id: new ObjectId(id),
+        user_id: userId,
       });
 
     return NextResponse.json({
