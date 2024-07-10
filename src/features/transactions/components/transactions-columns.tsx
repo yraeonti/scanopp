@@ -4,19 +4,19 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 
-import { cn } from "@/lib/utils";
+import { cn, formatAmount } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import Link from "next/link";
+
 import { Transaction } from "@/types";
 import {
   ArrowUpDown,
   Ban,
   CheckCircle,
-  Clock,
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
+import { TransactionsActions } from "./transactions-actions";
 
 export const transactions_columns: ColumnDef<Transaction>[] = [
   {
@@ -32,7 +32,11 @@ export const transactions_columns: ColumnDef<Transaction>[] = [
     accessorKey: "amount",
     header: () => <div className=" truncate  text-[#A3AED0]">Amount</div>,
     cell: ({ row }) => {
-      return <p className=" truncate capitalize ">#{row?.original?.amount}</p>;
+      return (
+        <p className=" truncate capitalize ">
+          {formatAmount(row?.original?.amount)}
+        </p>
+      );
     },
   },
   {
@@ -134,11 +138,9 @@ export const transactions_columns: ColumnDef<Transaction>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      return (
-        <Button variant="outline" className="flex items-center">
-          View More
-        </Button>
-      );
+      const transaction = row.original;
+
+      return <TransactionsActions transaction={transaction} />;
     },
   },
 ];

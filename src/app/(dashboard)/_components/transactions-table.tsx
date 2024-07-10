@@ -1,22 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 
 import { transactions_columns } from "./transactions-columns";
 import { Transaction } from "@/types";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useGetTransactions } from "@/features/transactions/api/use-get-transactions";
 
-export const TransactionsTable = () => {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const { isLoading, data, isError } = useGetTransactions();
+type TransactionsTableProps = {
+  transactions: Transaction[];
+  isLoading: boolean;
+};
 
-  useEffect(() => {
-    if (data && data?.length > 0) {
-      setTransactions(data as Transaction[]);
-    }
-  }, [data]);
+export const TransactionsTable = ({
+  transactions,
+  isLoading,
+}: TransactionsTableProps) => {
   return (
     <Card>
       <CardHeader>
