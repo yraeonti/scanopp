@@ -13,6 +13,7 @@ import { Transaction } from "@/types";
 import { Button } from "@/components/ui/button";
 import { useDeleteTransaction } from "../api/use-delete-transaction";
 import { toast } from "sonner";
+import { useEditTransaction } from "@/features/edit-transaction/hooks/use-edit-transaction";
 
 type TransactionsTableActionsProps = {
   transaction: Transaction;
@@ -22,6 +23,7 @@ export const TransactionsActions = ({
   transaction,
 }: TransactionsTableActionsProps) => {
   const { mutateAsync: deleteTransaction } = useDeleteTransaction();
+  const { onOpen: onEditOpen } = useEditTransaction();
 
   const handleDeleteTransaction = () => {
     toast.loading("Deleting Transaction");
@@ -55,7 +57,10 @@ export const TransactionsActions = ({
           <Copy className="ml-2 w-4 h-4" />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer flex items-center justify-between">
+        <DropdownMenuItem
+          className="cursor-pointer flex items-center justify-between"
+          onClick={() => onEditOpen(transaction._id as string)}
+        >
           Edit Transaction
           <Edit className="ml-2 w-4 h-4" />
         </DropdownMenuItem>
